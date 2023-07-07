@@ -252,7 +252,7 @@ class Board {
 
     start() {
         if(!this.sourceNode) {
-            alert('Please select the source');
+            alert('Please select the starting point');
         } else if(!this.destinationNode) {
             alert('Please select the destination')
         } else {
