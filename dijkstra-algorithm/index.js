@@ -17,6 +17,11 @@ const COLOR = {
     GREEN: COLOR_GREEN
 }
 
+const BOARD_STATE = {
+    PLAYING: 'playing',
+    PAUSED: 'paused'
+}
+
 // Config
 const boardConfig = {
     node: {
@@ -133,6 +138,7 @@ class Edge {
 class Board {
     constructor(container) {
         this.container = container;
+        this.state = BOARD_STATE.PAUSED;
         this.init();
     }
 
@@ -196,6 +202,7 @@ class Board {
     }
 
     async search() {
+        this.state = BOARD_STATE.PLAYING;
         const heap = new MinHeap();
         const visitedNodes = {};
         const costs = {[this.sourceNode.id]: 0};
@@ -234,15 +241,19 @@ class Board {
             currentNode = next.data.node;
             await new Promise((resolve) => setTimeout(resolve, boardConfig.haltDurationMS))
         }
+        this.state = BOARD_STATE.PAUSED;
     }
 
     highlightPath(map) {
         let currentNode = this.destinationNode;
-        while(currentNode) {
+        while(true) {
             currentNode.fill = boardConfig.shortestPathColor;
             currentNode.refresh();
 
             const nextNode = this.nodes[map[currentNode.id]];
+            if(!nextNode){
+                break;
+            }
             this.edges[nextNode.id][currentNode.id].fill = boardConfig.shortestPathColor;
             this.edges[nextNode.id][currentNode.id].refresh();
 
