@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./minHeap.js"></script>
+    <script src="./index.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Dijkstra's algorithm</title>
+</head>
+<body>
+    <div id="control-panel" class="hidden fixed z-10 w-screen h-screen flex justify-center items-center bg-transparent">
+        <div class="shadow-2xl bg-white border rounded-lg p-4 w-[400px] h-[100]">
+            <div class="flex justify-evenly items-center">
+                <button id="start-button" class="bg-slate-200 hover:bg-slate-300 rounded-lg px-4 py-2">Start</button>
+                <!-- <button id="pause-button" class="bg-slate-200 hover:bg-slate-300 rounded-lg px-4 py-2">Pause</button>
+                <button id="reset-button" class="bg-slate-200 hover:bg-slate-300 rounded-lg px-4 py-2">Reset</button> -->
+            </div>
+            <p>Number Of Nodes</p>
+            <input type="range" min="20" max="100" value="20" onchange="onConfigChange('node.count', Number(this.value), true)" class="w-full mt-2">
+            <p>Edges Per Node</p>
+            <input type="range" min="1" max="5" value="1" onchange="onConfigChange('edge.perNode', Number(this.value), true)" class="w-full mt-2">
+            <p>Transition Delay</p>
+            <input type="range" min="100" max="1000" value="1000" onchange="onConfigChange('haltDurationMS', Number(this.value))" class="w-full mt-2">
+            
+            <p class="mt-2">Note: Edges are bi(directional).</p>
+            <p>Note: The blue path will be the shortest.</p>
+            <p>Note: Blue and green are the explored edges, black unexplored.</p>
+        </div>
+    </div>
+    <svg id="container" class="h-screen w-screen">
+        
+    </svg>
+</body>
+<script>
+    const board = new Board(document.getElementById('container'));
+    const controlPanel = document.getElementById("control-panel");
+
+    function onConfigChange(fieldPath, value, needsRefresh) {
+        updateConfig(fieldPath, value);
+        if(needsRefresh) {
+            board.refresh();
+        }
+    }
+
+    function showControls() {
+        controlPanel.classList.remove("hidden");
+    }
+
+    function hideControls() {
+        controlPanel.classList.add("hidden");
+    }
+
+    function toggleControls() {
+        if(controlPanel.classList.contains("hidden")) {
+            showControls();
+        } else {
+            hideControls();
+        }
+    }
+
+    window.addEventListener("keypress", (event) => {
+        if(event.keyCode === 99) {
+            toggleControls();
+        }
+    })
+
+    window.addEventListener('dblclick', () => {
+        toggleControls();
+    })
+
+    document.getElementById("start-button").onclick = function() {
+        board.start();
+    }
+    /* document.getElementById("pause-button").onclick = function() {
+        game.pause();
+    }
+    document.getElementById("reset-button").onclick = function() {
+        game.reset();
+    } */
+</script>
+</html>
