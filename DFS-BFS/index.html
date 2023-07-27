@@ -33,10 +33,10 @@
     const board = new Board(document.getElementById('container'));
     const controlPanel = document.getElementById("control-panel");
 
-    function onConfigChange(fieldPath, value, needsRefresh) {
+    function onConfigChange(fieldPath, value, needsReset) {
         updateConfig(fieldPath, value);
-        if(needsRefresh) {
-            board.refresh();
+        if(needsReset) {
+            board.reset();
         }
     }
 
