@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./index.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Depth first search</title>
+</head>
+<body>
+    <div id="control-panel" class="hidden fixed z-10 w-screen h-screen flex justify-center items-center bg-transparent">
+        <div class="shadow-2xl bg-white border rounded-lg p-4 w-[400px] h-[100]">
+            <div class="flex justify-evenly items-center">
+                <button id="start-button" class="bg-slate-200 hover:bg-slate-300 rounded-lg px-4 py-2">Start</button>
+                <!-- <button id="pause-button" class="bg-slate-200 hover:bg-slate-300 rounded-lg px-4 py-2">Pause</button> -->
+                <button id="reset-button" class="bg-slate-200 hover:bg-slate-300 rounded-lg px-4 py-2">Reset</button>
+            </div>
+            <p>Depth/Height</p>
+            <input type="range" min="3" max="6" value="4" onchange="onConfigChange('treeHeight', Number(this.value), true)" class="w-full mt-2">
+            <p>Transition Delay</p>
+            <input type="range" min="100" max="1000" value="500" onchange="onConfigChange('haltDurationMS', Number(this.value))" class="w-full mt-2">
+            <div class="flex">
+                <input class="mr-1" type="radio" name="searchMode" checked onchange="onModeChange(SEARCH_MODE.DFS)"><p>Depth First:</p>
+                <input class="ml-5 mr-1" type="radio" name="searchMode" onchange="onModeChange(SEARCH_MODE.BFS)"><p>Breadth First:</p>
+            </div>
+        </div>
+    </div>
+    <svg id="container" class="h-screen w-screen">
+        
+    </svg>
+</body>
+<script>
+    const board = new Board(document.getElementById('container'));
+    const controlPanel = document.getElementById("control-panel");
+
+    function onConfigChange(fieldPath, value, needsRefresh) {
+        updateConfig(fieldPath, value);
+        if(needsRefresh) {
+            board.refresh();
+        }
+    }
+
+    function showControls() {
+        controlPanel.classList.remove("hidden");
+    }
+
+    function hideControls() {
+        controlPanel.classList.add("hidden");
+    }
+
+    function toggleControls() {
+        if(controlPanel.classList.contains("hidden")) {
+            showControls();
+        } else {
+            hideControls();
+        }
+    }
+
+    window.addEventListener("keypress", (event) => {
+        if(event.keyCode === 99) {
+            toggleControls();
+        }
+    })
+
+    window.addEventListener('dblclick', () => {
+        toggleControls();
+    })
+
+    document.getElementById("start-button").onclick = function() {
+        board.start();
+    }
+
+    document.getElementById("reset-button").onclick = function() {
+        board.reset();
+    }
+
+    function onModeChange(mode) {
+        onConfigChange('searchMode', mode);
+    }
+</script>
+</html>
