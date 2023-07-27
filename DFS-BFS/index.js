@@ -33,7 +33,7 @@ const boardConfig = {
         activeColor: COLOR.BLUE
     },
     // Note: padding depends on node radius
-    treeHeight: 5,
+    treeHeight: 4,
     searchMode: SEARCH_MODE.DFS,
     padding: 10 + 20,
     nodeIdColor: COLOR.RED,
